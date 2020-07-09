@@ -5,8 +5,7 @@ int main(void) {
   while(std::cin >> number) {
     int zero_position = number.size();
     for(int i = number.size()-1; i >= 0; i--) {
-      std::string s(1, number.at(i));
-      if(!s.compare("0")) {
+      if(!number.compare(i, 1, "0")) {
         zero_position--;
       } else {
         break;
