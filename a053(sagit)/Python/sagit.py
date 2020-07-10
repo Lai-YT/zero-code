@@ -13,5 +13,6 @@ while True:
         else:
             score = 100
         print(score)
+        
     except:
         break

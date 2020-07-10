@@ -12,5 +12,6 @@ while True:
             print('yes')
         else:
             print('no')
+            
     except:
         break

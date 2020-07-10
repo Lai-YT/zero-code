@@ -22,6 +22,6 @@ int main(void) {
       std::cout << "no" << '\n';
     }
   }
-
+  
   return 0;
 }

@@ -21,6 +21,6 @@ int main(void) {
     }
     std::cout << score << '\n';
   }
-
+  
   return 0;
 }
