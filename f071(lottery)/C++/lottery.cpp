@@ -3,8 +3,7 @@
 int main(int argc, char const *argv[]) {
 
   int lucky_number[3], number[5], money[5];
-  while (true) {
-    std::cin >> lucky_number[0] >> lucky_number[1] >> lucky_number[2];
+  while (std::cin >> lucky_number[0] >> lucky_number[1] >> lucky_number[2]) {
     std::cin >> number[0] >> number[1] >> number[2] >> number[3] >> number[4];
     std::cin >> money[0] >> money[1] >> money[2] >> money[3] >> money[4];
 
