@@ -1,3 +1,6 @@
-
-str = input()
-print("hello, " + str)
+while True:
+    try:
+        str = input()
+        print("hello, " + str)
+    except:
+        break
