@@ -4,6 +4,7 @@ while True:
 
         print(f'{a//b}.', end = '')
         digit = 0
+        # get 10 digits every loop. for efficiency
         while digit != n // 10:
             a = a % b
             a *= 10000000000
