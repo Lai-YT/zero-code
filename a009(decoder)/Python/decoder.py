@@ -1,4 +1,3 @@
-
 sentence = input()
 
 for word in sentence:
