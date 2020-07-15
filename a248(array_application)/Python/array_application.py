@@ -18,7 +18,6 @@ while True:
             elif len(str(d)) == 4: print(f'000000{d}', end = '')
             elif len(str(d)) == 3: print(f'0000000{d}', end = '')
             elif len(str(d)) == 2: print(f'00000000{d}', end = '')
-            elif d == 0: print('0000000000', end = '')
             else: print(f'000000000{d}', end = '')
             digit += 1
         digit = 0
