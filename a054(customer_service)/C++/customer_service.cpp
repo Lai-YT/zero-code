@@ -5,10 +5,15 @@ int main(void) {
   while (std::cin >> number) {
     int sum = 0;
     for (int i = 0; i < 8; i++) {
-      sum += (int)number[i] * (8 - i);
+      sum += ((int)number[i] - 48) * (8 - i);
     }
-    int n = ((sum) % 10 + (int)number[8] - 10) % 10;
-    switch (n) {
+    int n;
+    if (10 - ((int)number[8] - 48) >= sum % 10) {
+      n = 10 - ((int)number[8] - 48) - sum % 10;
+    } else {
+      n = 20 - ((int)number[8] - 48) - sum % 10;
+    }
+    switch (n % 10) {
       case 0:
         std::cout << "BNZ" << '\n';
         break;
@@ -28,10 +33,10 @@ int main(void) {
         std::cout << "GT" << '\n';
         break;
       case 6:
-        std::cerr << "FS" << '\n';
+        std::cout << "FS" << '\n';
         break;
       case 7:
-        std::cerr << "ER" << '\n';
+        std::cout << "ER" << '\n';
         break;
       case 8:
         std::cout << "DOQ" << '\n';
@@ -44,5 +49,3 @@ int main(void) {
 
   return 0;
 }
-
-// 10 - number[8] = (sum % 10 + n % 10) % 10
