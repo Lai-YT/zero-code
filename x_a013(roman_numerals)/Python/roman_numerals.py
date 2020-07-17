@@ -52,5 +52,4 @@ while True:
         difference = abs(n1 - n2)
         print(decimal_to_roman(difference))
     except:
-        raise
         break
