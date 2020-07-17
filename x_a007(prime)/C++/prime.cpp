@@ -8,13 +8,13 @@ bool is_prime(int number) {
       return false;
   } else {
     int ceil = sqrt(number);
-    for(int i = 5; i < ceil; i += 6) {
+    for(int i = 5; i <= ceil; i += 6) {
       if(number % i == 0 || number % (i+2) == 0) {
         return false;
       }
     }
   }
-  return true;
+  return number != 1; // 1 is not a prime number
 }
 
 
