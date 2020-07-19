@@ -1,27 +1,25 @@
 #include <iostream>
-#include <algorithm>
 
 int main(void) {
+  std::ios_base::sync_with_stdio(false);
+
   int length;
   while(std::cin >> length) {
-    int numbers[length];
-    for(int i = 0; i < length; i++) {
-      std::cin >> numbers[i];
+    int number, max(0), min(0);
+    std::cin >> number;
+    min = max = number;
+    for(int i = 1; i < length; i++) {
+      std::cin >> number;
+      if (number > max) max = number;
+      else if (number < min) min = number;
     }
-    std::sort(numbers, numbers+length);
-    bool consecutive = true;
-    for(int i = 0; i < length-1; i++) {
-      if(numbers[i] + 1 != numbers[i+1]) {
-        consecutive = false;
-      }
-    }
-    std::cout << numbers[0] << " " << numbers[length-1] << " ";
-    if(consecutive) {
-      std::cout << "yes" << '\n';
+    std::cout << min << " " << max << " ";
+    if((max - min) == (length - 1)) {
+      std::cout << "yes\n";
     } else {
-      std::cout << "no" << '\n';
+      std::cout << "no\n";
     }
   }
-  
+
   return 0;
 }
