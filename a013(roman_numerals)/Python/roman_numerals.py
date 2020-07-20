@@ -15,14 +15,8 @@ def roman_to_decimal(roman_number: str) -> int:
         i += 1
     return decimal_number
 
-def partial_convert_to_roman(convert_pack: list, numeral: str):
-    times = convert_pack[0] // roman_dict[numeral]
-    convert_pack[0] %= roman_dict[numeral]
-    convert_pack[1].append(numeral * times)
-
 def decimal_to_roman(decimal_number: int) -> str:
-    if decimal_number == 0:
-        return 'ZERO'
+    if decimal_number == 0: return 'ZERO'
     roman_number = []
     for numeral, value in roman_dict.items():
         times = decimal_number // value;
