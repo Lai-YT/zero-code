@@ -6,8 +6,6 @@ while True:
             for j in range(num_of_nums - 1 - i):
                 if numbers[j] > numbers[j + 1]:
                     numbers[j], numbers[j + 1] = numbers[j + 1], numbers[j]
-        for n in numbers:
-            print(n, end = ' ')
-        print()
+        print(*numbers, sep = ' ')
     except:
         break
