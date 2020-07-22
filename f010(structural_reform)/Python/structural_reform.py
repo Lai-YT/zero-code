@@ -4,51 +4,53 @@ class Coordinate():
         self.x = x
         self.y = y
 
-    def __add__(self, other):
-        return Coordinate(self.x + other.x, self.y + other.y)
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self.x == other.x and self.y == other.y
 
-    def __sub__(self, other):
-        return Coordinate(self.x - other.x, self.y - other.y)
-
-    def __iadd__(self, other):
-        self.x += other.x
-        self.y += other.y
-        return self
-
-    def __isub__(self, other):
-        self.x -= other.x
-        self.y -= other.y
-        return self
+    def __hash__(self):
+        return hash((self.x, self.y))
 
     def __str__(self):
         return f'({self.x},{self.y})'
 
-class Item():
-    def __init__(self, name):
-        self.name = name
-
-    def copy(self):
-        return Item(self.name)
-
-class Food(Item):
+class Food():
     def __init__(self, name, sat):
-        super().__init__(name)
+        self.name = name
         self.sat = sat
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self.name == other.name and self.sat == other.sat
+
+    def __hash__(self):
+        return hash((self.name, self.sat))
 
     def copy(self):
         return Food(self.name, self.sat)
 
-class Material(Item):
+
+class Material():
     def __init__(self, name):
-        super().__init__(name)
+        self.name = name
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
 
     def copy(self):
         return Material(self.name)
 
+
 class Player():
     __walk_step_record = 0
     __run_step_record = 0
-    __respawn_position = Coordinate(0, 0)
 
     def __init__(self, *, hp = 10, sat = 10, position = Coordinate(0, 0), backpack = {}):
         self.hp = hp
@@ -78,22 +80,20 @@ class Player():
 
     def pick(self, item, amount):
         if item in self.backpack:
-            self.backpack[item] += amount
-        else:
-            self.backpack[item] = amount
+            self.backpack[item.copy()] += amount
+        else: self.backpack[item.copy()] = amount
 
     def eat(self, food_name, amount):
         for food in [f for f in self.backpack if f.name == food_name]:
             self.backpack[food] -= amount
             self.sat += food.sat * amount
-
+            if self.backpack[food] == 0:
+                del self.backpack[food]
+            break
         if self.sat > 10:
-            self.hp += (self.sat % 10) // 2
+            self.hp += (self.sat - 10) // 2
             self.sat = 10
-            self.hp %= 10
-
-    def sleep(self):
-        self.__respawn_position = self.position
+            if self.hp > 10: self.hp = 10
 
     def die(self):
         self.hp = 0
@@ -102,10 +102,10 @@ class Player():
         self.__run_step_record = 0
         self.backpack.clear()
 
-    def respawn(self):
-        self.hp = 10
-        self.sat = 10
-        self.position = self.__respawn_position
+    def respawn(self, *, hp = 10, sat = 10, position):
+        self.hp = hp
+        self.sat = sat
+        self.position = position
 
     def print_hp(self):
         print(f'HP:{self.hp}')
@@ -126,10 +126,12 @@ class Monster():
         self.name = name
         self.atk = atk
 
+
 from sys import stdin
 player = Player()
 monsters = []
 drop_list = {}
+respawn_position = Coordinate(0, 0)
 while True:
     try:
         line = stdin.readline()
@@ -138,18 +140,18 @@ while True:
         movement = instruction[0]
         if movement == 'Walk':
             player.walk(instruction[1], step = int(instruction[2]))
-            if str(player.position) in drop_list:
-                for item, amount in drop_list[str(player.position)].items():
-                    player.pick(item.copy(), amount)
-                del drop_list[str(player.position)]
+            if player.position in drop_list:
+                for item, amount in drop_list[player.position].items():
+                    player.pick(item, amount)
+                del drop_list[player.position]
         elif movement == 'Run':
             player.run(instruction[1], step = int(instruction[2]))
-            if str(player.position) in drop_list:
-                for item, amount in drop_list[str(player.position)].items():
-                    player.pick(item.copy(), amount)
-                del drop_list[str(player.position)]
+            if player.position in drop_list:
+                for item, amount in drop_list[player.position].items():
+                    player.pick(item, amount)
+                del drop_list[player.position]
         elif movement == 'Sleep':
-            player.sleep()
+            respawn_position = player.position
         elif movement == 'Create':
             monsters.append(Monster(instruction[1], atk = int(instruction[2])))
         elif movement == 'Attacked':
@@ -157,14 +159,14 @@ while True:
                 if monster.name == instruction[2]:
                     player.hp -= monster.atk
         elif movement == 'Pick':
-            if len(instruction) == 3 and instruction[1] not in [x.name for x in player.backpack]:
-                player.pick(Material(instruction[1]), amount = int(instruction[2]))
+            if len(instruction) == 3 and instruction[1] in [x.name for x in player.backpack]:
+                for item in [i for i in player.backpack if i.name == instruction[1]]:
+                    player.pick(item, amount = int(instruction[2]))
+                    break
             elif len(instruction) == 4:
                 player.pick(Food(instruction[1], sat = int(instruction[3])), amount = int(instruction[2]))
             else:
-                for item in player.backpack:
-                    if item.name == instruction[1]:
-                        player.pick(item, amount = int(instruction[2]))
+                player.pick(Material(instruction[1]), amount = int(instruction[2]))
         elif movement == 'Eat':
             player.eat(instruction[1], amount = int(instruction[2]))
         elif instruction[1] == 'HP':
@@ -178,12 +180,13 @@ while True:
         else: break
         if player.hp <= 0 or player.sat <= 0:
             if player.backpack:
-                drop_list[str(player.position)] = player.backpack.copy()
+                drop_list[player.position] = player.backpack.copy()
             player.die()
-            player.respawn()
-            if str(player.position) in drop_list:
-                for item, amount in drop_list[str(player.position)].items():
-                    player.pick(item.copy(), amount)
-                del drop_list[str(player.position)]
+            player.respawn(position = respawn_position)
+            if player.position in drop_list:
+                for item, amount in drop_list[player.position].items():
+                    player.pick(item, amount)
+                del drop_list[player.position]
+
     except:
-        break
+        raise
