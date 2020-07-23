@@ -1,6 +1,6 @@
 
 ''' In Python, when a = b, a works like a pointer instead of copying the value of b.
-    So copy() appears frequently to avoid unexpected changes '''
+    So b.copy() appears frequently to avoid unexpected changes '''
 
 class Coordinate():
     def __init__(self, x = 0, y = 0):
@@ -53,7 +53,6 @@ class Material():
         return Material(self.name)
 
 class Player():
-
     def __init__(self, *, hp = 10, sat = 10, position = Coordinate(0, 0), backpack = None):
         # backpack is a dict, {Food/Material: amount}
         self.hp = hp
@@ -139,11 +138,22 @@ class Monster():
         self.name = name
         self.atk = atk
 
+    def __eq__(self, other):
+        return self.name == other.name and self.atk == other.atk
+
+    def __hash__(self):
+        return hash((self.name, self.atk))
+
+    def copy(self):
+        return Monster(self.name, self.atk)
+
+
 
 from sys import stdin
 player = Player()
 monsters = []
-drop_list = {}
+drop_list = {} # {Coordinate: backpack}
+food_list = {} # {Food_name: sat}
 respawn_position = Coordinate(0, 0)
 while True:
     line = stdin.readline().strip('\n')
@@ -175,15 +185,20 @@ while True:
         for monster in monsters:
             if monster.name == instruction[2]:
                 player.hp -= monster.atk
+                break
     elif movement == 'Pick':
         # picked before
         if len(instruction) == 3 and instruction[1] in [x.name for x in player.backpack]:
             for item in [i for i in player.backpack if i.name == instruction[1]]:
                 player.pick(item, amount = int(instruction[2]))
                 break
+        # check if the food has appeared already
+        elif len(instruction) == 3 and instruction[1] in food_list:
+            player.pick(Food(instruction[1], sat = food_list[instruction[1]]), amount = int(instruction[2]))
         # Food haven't picked
         elif len(instruction) == 4:
             player.pick(Food(instruction[1], sat = int(instruction[3])), amount = int(instruction[2]))
+            food_list[instruction[1]] = int(instruction[3])
         # Material haven't picked
         else:
             player.pick(Material(instruction[1]), amount = int(instruction[2]))
