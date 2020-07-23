@@ -91,8 +91,8 @@ class Player():
     def pick(self, item, amount):
         # use copy() to avoid deletion
         if item in self.backpack:
-            self.backpack[item.copy()] += amount
-        else: self.backpack[item.copy()] = amount
+            self.backpack[item] += amount
+        else: self.backpack[item] = amount
 
     def eat(self, food_name, amount):
         for food in [f for f in self.backpack if f.name == food_name]:
@@ -146,7 +146,6 @@ class Monster():
 
     def copy(self):
         return Monster(self.name, self.atk)
-
 
 
 from sys import stdin
