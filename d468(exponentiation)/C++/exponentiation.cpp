@@ -10,13 +10,7 @@ lint pow(lint a, lint n) {
     if (n % 2 == 0) return 1;
     return -1;
   }
-  if (n > 100){
-    for (lint i = 0; i < n / 100; i++) result *= a;
-    return pow(pow(a, n / 100), 100) * pow(a, n % 100);
-  } else if (n  > 10) {
-    for (lint i = 0; i < n / 10; i++) result *= a;
-    return pow(result, 10) * pow(a, n % 10);
-  } else if (n % 2 == 0) {
+  if (n % 2 == 0) {
     for (lint i = 0; i < n / 2; i++) result *= a;
     return result * result;
   } else if (n % 3 == 0) {
