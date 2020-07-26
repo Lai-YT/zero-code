@@ -1,13 +1,18 @@
-#include <cstdio>
+#include <iostream>
 
 typedef long long int lint;
 
 lint pow(lint a, lint n) {
   lint result = 1;
-  if (n == 0 || a == 1) return result;
+  if (n == 0) return 1;
+  if (a == 1) return 1;
+  if (a == -1) {
+    if (n % 2 == 0) return 1;
+    return -1;
+  }
   if (n > 100){
     for (lint i = 0; i < n / 100; i++) result *= a;
-    return pow(result, 100) * pow(a, n % 100);
+    return pow(pow(a, n / 100), 100) * pow(a, n % 100);
   } else if (n  > 10) {
     for (lint i = 0; i < n / 10; i++) result *= a;
     return pow(result, 10) * pow(a, n % 10);
@@ -24,13 +29,30 @@ lint pow(lint a, lint n) {
 }
 
 int main(int argc, char const *argv[]) {
+  std::ios_base::sync_with_stdio(false);
+  std::cin.tie(0);
+
   lint a, n;
-  while (scanf("%lld %lld", &a, &n)) {
-    if (a == 0 && n == 0) {
-      puts("All Over.\n");
-      break;
+  std::string s;
+  while (std::cin >> a) {
+    if (a == -1) {
+      std::cin >> s;
+      if (s[s.length()-1] % 2 == 0) std::cout << "1\n";
+      else std::cout << "-1\n";
+    } else if (a == 1) {
+      std::cin >> s;
+      std::cout << "1\n";
+    } else if (a == 0) {
+      std::cin >> s;
+      if (s == "0") {
+        std::cout << "All Over.\n";
+        break;
+      }
+      std::cout << "0\n";
+    } else {
+      std::cin >> n;
+      std::cout << pow(a, n) << '\n';
     }
-    printf("%lld\n", pow(a, n));
   }
   return 0;
 }
