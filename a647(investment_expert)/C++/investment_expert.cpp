@@ -11,8 +11,8 @@ double round(double n) {
   }
   double rounded;
   int check = int(n * 1000) % 10;
-  if (check >= 5) rounded = (double)((int)(n * 100 + 1)) / 100;
-  else rounded = (double)((int)(n * 100)) / 100;
+  if (check >= 5) rounded = (int)(n * 100 + 1) / 100.0f;
+  else rounded = (int)(n * 100) / 100.0f;
   if (is_nagative) return -rounded;
   return rounded;
 }
