@@ -10,7 +10,7 @@ while True:
         balls.remove(int(target))
         ball = balls.index(int(destination))
         if pos == 'F':
-            balls.insert(0, int(target)) if ball + 1 >= num_of_balls else balls.insert(ball + 1, int(target))
+            balls.insert(0, int(target)) if ball + 1 >= len(balls) else balls.insert(ball + 1, int(target))
         else: balls.insert(balls.index(int(destination)), int(target))
     queries = list(map(int, stdin.readline().split()))
     for q in queries:
