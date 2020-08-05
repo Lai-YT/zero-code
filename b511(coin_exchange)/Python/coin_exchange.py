@@ -5,7 +5,6 @@ denominations = []
 counts = []
 
 def exchange(money, index_of_deno):
-    print(money, index_of_deno, denominations, counts)
     if money == 0:
         print('(', end = '')
         print(*counts, sep = ',', end = ')\n')
@@ -15,6 +14,7 @@ def exchange(money, index_of_deno):
     for amount in range(max_amount + 1):
         counts[index_of_deno] = amount
         exchange(money - denominations[index_of_deno] * amount, index_of_deno + 1)
+    return
 
 while True:
     line = stdin.readline().strip('\n')
