@@ -7,7 +7,7 @@ int main(int argc, char const *argv[]) {
   char command;
   while (scanf("%d\n", &num_of_commands) != EOF) {
     std::stack<std::string> s;
-    for (int i = 0; i < num_of_commands; i++) {
+    while (num_of_commands--) {
       command = getchar();
       if (command == '1') s.pop();
       else if (command == '2') printf("%d\n", std::stoi(s.top()));
