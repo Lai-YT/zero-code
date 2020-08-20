@@ -25,25 +25,20 @@ while True:
         else:
             teams[num_of_teams - 1 - rank % num_of_teams].append(runner)
     for team_num in range(num_of_teams - 1):
-        stdout.write(f'{team_num+1} ')
+        print(team_num+1, end = ' ')
         team = teams[team_num]
-        stdout.write(f'{int(team[6][0])} {int(team[4][0])} {int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])} {int(team[5][0])} {int(team[7][0])}\n')
+        print(int(team[6][0]), int(team[4][0]), int(team[2][0]), int(team[0][0]), int(team[1][0]), int(team[3][0]), int(team[5][0]), int(team[7][0]))
     team = teams[num_of_teams-1]
-    stdout.write(f'{num_of_teams} ')
+    print(num_of_teams, end = ' ')
     s = len(team)
-    if s == 8:
-        stdout.write(f'{int(team[6][0])} {int(team[4][0])} {int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])} {int(team[5][0])} {int(team[7][0])}\n')
-    elif s == 7:
-        stdout.write(f'{int(team[6][0])} {int(team[4][0])} {int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])} {int(team[5][0])}\n')
-    elif s == 6:
-        stdout.write(f'{int(team[4][0])} {int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])} {int(team[5][0])}\n')
-    elif s == 5:
-        stdout.write(f'{int(team[4][0])} {int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])}\n')
-    elif s == 4:
-        stdout.write(f'{int(team[2][0])} {int(team[0][0])} {int(team[1][0])} {int(team[3][0])}\n')
-    elif s == 3:
-        stdout.write(f'{int(team[2][0])} {int(team[0][0])} {int(team[1][0])}\n')
-    elif s == 2:
-        stdout.write(f'{int(team[0][0])} {int(team[1][0])}\n')
+    if is_even(s):
+        for i in range(s-2, -1, -2):
+            print(int(team[i][0]), end = ' ')
+        for i in range(1, s, 2):
+            print(int(team[i][0]), end = ' ')
     else:
-        stdout.write(f'{int(team[0][0])}\n')
+        for i in range(s-1, -1, -2):
+            print(int(team[i][0]), end = ' ')
+        for i in range(1, s, 2):
+            print(int(team[i][0]), end = ' ')
+    print()

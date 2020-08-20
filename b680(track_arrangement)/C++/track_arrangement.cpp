@@ -32,19 +32,19 @@ int main(int argc, char const *argv[]) {
     }
     for (int i = 0; i < num_of_teams - 1; i++) {
       vector<pair<int, double> > team = teams.at(i);
-      cout << i+1 << ' '  << team.at(6).first << ' ' << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << ' ' << team.at(5).first << ' ' << team.at(7).first << '\n';
+      cout << i+1 << ' ' << team.at(6).first << ' ' << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << ' ' << team.at(5).first << ' ' << team.at(7).first << '\n';
     }
     vector<pair<int, double> > team = teams.at(num_of_teams - 1);
     cout << num_of_teams << ' ';
     int s = team.size();
-    if (s == 8) cout << team.at(6).first << ' ' << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << ' ' << team.at(5).first << ' ' << team.at(7).first << '\n';
-    else if (s == 7) cout << team.at(6).first << ' ' << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << ' ' << team.at(5).first << '\n';
-    else if (s == 6) cout << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << ' ' << team.at(5).first << '\n';
-    else if (s == 5) cout << team.at(4).first << ' ' << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << '\n';
-    else if (s == 4) cout << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << ' ' << team.at(3).first << '\n';
-    else if (s == 3) cout << team.at(2).first << ' ' << team.at(0).first << ' ' << team.at(1).first << '\n';
-    else if (s == 2) cout << team.at(0).first << ' ' << team.at(1).first << '\n';
-    else cout << team.at(0).first << '\n';
+    if (is_even(s)) {
+      for (int i = s - 2; i >= 0; i -= 2) std::cout << team.at(i).first << ' ';
+      for (int i = 1; i < s; i += 2) std::cout << team.at(i).first << ' ';
+    } else {
+      for (int i = s - 1; i >= 0; i -= 2) std::cout << team.at(i).first << ' ';
+      for (int i = 1; i < s; i += 2) std::cout << team.at(i).first << ' ';
+    }
+    std::cout << '\n';
   }
   return 0;
 }
