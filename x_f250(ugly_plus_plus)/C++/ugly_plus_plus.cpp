@@ -1,25 +1,24 @@
 #include <iostream>
-
-bool is_ugly(long long n) {
-  while (n % 2 == 0) n /= 2;
-  while (n % 3 == 0) n /= 3;
-  while (n % 5 == 0) n /= 5;
-  return n == 1;
-}
+#define min(a, b) (a < b ? a : b)
 
 int main(int argc, char const *argv[]) {
   std::ios::sync_with_stdio(false);
   std::cin.tie(0);
-  int cases, place;
-  while (std::cin >> cases) {
-    while (cases--) {
+  int quest, place, i2, i3, i5;
+  unsigned long long next_2, next_3, next_5, next_ugly;
+  while (std::cin >> quest) {
+    while (quest--) {
       std::cin >> place;
-      int count = 0;
-      long long n = 1;
-      while (count != place) {
-        if (is_ugly(n++)) count++;
+      unsigned long long ugly_numbers[place] = {1};
+      i2 = i3 = i5 = 0;
+      next_2 = 2; next_3 = 3; next_5 = 5;
+      for (int i = 1; i < place; i++) {
+        ugly_numbers[i] = next_ugly = min(min(next_2, next_3), next_5);
+        if (next_ugly == next_2) next_2 = ugly_numbers[++i2] * 2;
+        if (next_ugly == next_3) next_3 = ugly_numbers[++i3] * 3;
+        if (next_ugly == next_5) next_5 = ugly_numbers[++i5] * 5;
       }
-      std::cout << --n << '\n';
+      std::cout << ugly_numbers[place-1] << '\n';
     }
   }
   return 0;
