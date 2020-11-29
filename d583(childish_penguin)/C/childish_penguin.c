@@ -97,7 +97,7 @@ int main(void) {
       .head = NULL,
       .size = size_of_list
     };
-    for (int i = 0; i < size_of_list; i++) {
+    while (size_of_list--) {
       Node *newNode = (Node *) malloc (sizeof(Node));
       int data;
       scanf("%d", &data);
