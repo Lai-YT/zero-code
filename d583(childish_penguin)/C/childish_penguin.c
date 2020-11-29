@@ -107,7 +107,7 @@ int main(void) {
     }
     LinkedList newList = MergeSort(list);
     printList(newList);
-    freeMemory(list);
+    freeMemory(newList);
   }
 
   return 0;
