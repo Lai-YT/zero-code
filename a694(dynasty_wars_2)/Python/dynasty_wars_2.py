@@ -1,7 +1,11 @@
 from sys import stdin, stdout
+
+
 while True:
     line = stdin.readline()
-    if not line: break
+    if not line:
+        break
+
     n, m = map(int, line.split())
     matrix = [[0 for i in range(n + 1)] for i in range(n + 1)]
     for i in range(1, n + 1):
