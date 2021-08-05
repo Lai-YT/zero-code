@@ -1,2 +1,11 @@
+# C++
 bin/
+obj/
 *makefile
+
+# Python
+__pycache__/
+.mypy_cache/
+
+# Java
+*.class
