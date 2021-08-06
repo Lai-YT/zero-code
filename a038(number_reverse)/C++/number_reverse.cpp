@@ -1,27 +1,25 @@
+#include <algorithm>
 #include <iostream>
+#include <string>
 
-int main(void) {
-  std::string number;
-  while(std::cin >> number) {
-    int zero_position = number.size();
-    for(int i = number.size()-1; i >= 0; i--) {
-      if(!number.compare(i, 1, "0")) {
-        zero_position--;
-      } else {
-        break;
-      }
-    }
-    std::string number_reversed = "";
-    for(int i = zero_position-1; i >= 0; i--) {
-      number_reversed += number[i];
-    }
 
-    if(number_reversed.empty()) {
-      number_reversed = "0";
-    }
+int main(int argc, char const *argv[]) {
 
-    std::cout << number_reversed << '\n';
+  std::string line = "";
+  while (std::cin >> line) {
+    /*
+     * Since the index of std::string start from the MSB of a number,
+     * reverse first so the reverse_itr is not required,
+     * which is more straight forward.
+     */
+    std::reverse(line.begin(), line.end());
+
+    auto begin_itr = line.cbegin();
+    for (; begin_itr != line.cend() && *begin_itr == '0'; ++begin_itr);
+
+    std::cout << (
+      begin_itr == line.cend() ? "0" : std::string(begin_itr, line.cend())
+    ) << '\n';
   }
-
   return 0;
 }

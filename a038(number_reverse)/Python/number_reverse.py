@@ -1,22 +1,7 @@
-while True:
-    try:
-        number = input()
+from sys import stdin, stdout
 
-        zero_position = len(number)
 
-        # from the LSB, find the last position of the consecutive zeros
-        for i in range(len(number)-1, -1, -1):
-            if number[i] == '0':
-                zero_position -= 1
-            else:
-                break
-
-        number_reversed = ''.join(reversed(number[:zero_position]))
-
-        if number_reversed == '':
-            number_reversed += '0'
-
-        print(number_reversed)
-
-    except:
-        break
+for line in stdin:
+    stdout.write(
+        ('0' if int(line) == 0 else line.rstrip('0')[::-1])
+    + '\n')
