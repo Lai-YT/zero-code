@@ -7,9 +7,9 @@ int main(int argc, char const *argv[]) {
   std::string sentence = "";
 
   while (std::getline(std::cin, sentence)) {
-    /* add an extra non-alphabetic char to make sure the last word iss counted */
+    /* add an extra non-alphabetic char to make sure the last word is counted */
     sentence.push_back('-');
-    
+
     int word_count = 0;
     bool in_word = false;
     for (const char c : sentence) {

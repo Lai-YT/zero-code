@@ -2,7 +2,7 @@ from sys import stdin, stdout
 
 
 for line in stdin:
-    # add an extra non-alphabetic char to make sure the last word iss counted
+    # add an extra non-alphabetic char to make sure the last word is counted
     line += '-';
 
     in_word: bool = False
