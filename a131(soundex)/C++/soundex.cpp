@@ -11,67 +11,28 @@ void PrintStart();
 
 void PrintEnd();
 
+std::string ConvertToSoundex(const std::string &name);
+
 void PrintNameAndSoundex(const std::string &name, const std::string &soundex);
 
 std::unordered_map<char, char> InitCodeTable();
 
 
+const std::unordered_set<char> SKIPPERS = {'A', 'E', 'I', 'O', 'U', 'Y', 'W', 'H'};
+const std::unordered_map<char, char> CODE_TABLE = InitCodeTable();
+const char FILLER = '0';
+const int MAX_SOUNDEX_LENGTH = 4;
+
 int main(int argc, char const *argv[]) {
   OptimizeIo();
-
-  const std::unordered_set<char> SKIPPERS = {'A', 'E', 'I', 'O', 'U', 'Y', 'W', 'H'};
-  const std::unordered_map<char, char> CODE_TABLE = InitCodeTable();
-  const char FILLER = '0';
-  const int MAX_SOUNDEX_LENGTH = 4;
-
   PrintStart();
 
   std::string name{};
   while (std::cin >> name) {
-    /*
-     * The first letter is special.
-     * Put its code if has and replace back later;
-     * otherwise, the letter itself.
-     */
-    std::string soundex{};
-    const auto first_iter = CODE_TABLE.find(name.front());
-    if (first_iter != CODE_TABLE.cend()) {
-      soundex.push_back(first_iter->second);
-    } else {
-      soundex.push_back(name.front());
-    }
-    /* skippers can break consecutives */
-    bool met_skipper = false;
-    for (size_t i = 1; i < name.size() && soundex.size() < MAX_SOUNDEX_LENGTH; ++i) {
-      const char letter = name.at(i);
-      /* skip if is a skipper */
-      if (SKIPPERS.find(letter) != SKIPPERS.cend()) {
-        met_skipper = true;
-        continue;
-      }
-      const auto iter = CODE_TABLE.find(letter);
-      if (iter != CODE_TABLE.cend()) {
-        const char code = iter->second;
-        /* skip the consecutives */
-        if (code == soundex.back() && !met_skipper) {
-          continue;
-        }
-        /* add the new code */
-        soundex.push_back(code);
-        met_skipper = false;
-      }
-    }
-    /* fill up to the max length */
-    while (soundex.size() != MAX_SOUNDEX_LENGTH) {
-      soundex.push_back(FILLER);
-    }
-
-    /* replace the first letter back */
-    soundex.front() = name.front();
-
+    std::string soundex = ConvertToSoundex(name);
     PrintNameAndSoundex(name, soundex);
   }
-
+  
   PrintEnd();
 
   return 0;
@@ -93,6 +54,52 @@ void PrintStart() {
 void PrintEnd() {
   /* start at 20 */
   std::cout << "                  END OF OUTPUT" << '\n';
+}
+
+
+std::string ConvertToSoundex(const std::string &name) {
+  /*
+   * The first letter is special.
+   * Put its code if has and replace back later;
+   * otherwise, the letter itself.
+   */
+  std::string soundex{};
+  const auto first_iter = CODE_TABLE.find(name.front());
+  if (first_iter != CODE_TABLE.cend()) {
+    soundex.push_back(first_iter->second);
+  } else {
+    soundex.push_back(name.front());
+  }
+  /* skippers can break consecutives */
+  bool met_skipper = false;
+  for (size_t i = 1; i < name.size() && soundex.size() < MAX_SOUNDEX_LENGTH; ++i) {
+    const char letter = name.at(i);
+    /* skip if is a skipper */
+    if (SKIPPERS.find(letter) != SKIPPERS.cend()) {
+      met_skipper = true;
+      continue;
+    }
+    const auto iter = CODE_TABLE.find(letter);
+    if (iter != CODE_TABLE.cend()) {
+      const char code = iter->second;
+      /* skip the consecutives */
+      if (code == soundex.back() && !met_skipper) {
+        continue;
+      }
+      /* add the new code */
+      soundex.push_back(code);
+      met_skipper = false;
+    }
+  }
+  /* fill up to the max length */
+  while (soundex.size() != MAX_SOUNDEX_LENGTH) {
+    soundex.push_back(FILLER);
+  }
+
+  /* replace the first letter back */
+  soundex.front() = name.front();
+
+  return std::move(soundex);
 }
 
 
