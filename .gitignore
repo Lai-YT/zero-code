@@ -1,7 +1,8 @@
 # C++
 bin/
 obj/
-*makefile
+[Mm]akefile
+*.o
 
 # Python
 __pycache__/
